@@ -12,5 +12,8 @@ import com.factory.logistics.weather.entity.WeatherCache;
 
 @Repository
 public interface WeatherCacheRepository extends JpaRepository<WeatherCache, UUID> {
-    Optional<WeatherCache> findByLatitudeAndLongitudeAndDate(BigDecimal latitude, BigDecimal longitude, LocalDate date);
+    Optional<WeatherCache> findByDestinationLatitudeAndDestinationLongitudeAndForecastDate(
+            BigDecimal destinationLatitude,
+            BigDecimal destinationLongitude,
+            LocalDate forecastDate);
 }

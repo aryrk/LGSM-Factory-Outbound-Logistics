@@ -3,9 +3,12 @@ package com.factory.logistics.weather.util;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import org.springframework.stereotype.Component;
+
 import com.factory.logistics.shipment.enums.RiskLevel;
 import com.factory.logistics.weather.dto.OpenMeteo.OpenMeteoResponse;
 
+@Component
 public class WeatherRiskCalculator {
 
     public RiskLevel calculateRiskLevel(BigDecimal precipMm) {

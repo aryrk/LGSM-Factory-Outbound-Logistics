@@ -41,7 +41,7 @@ public class WeatherRiskService {
     }
 
     public BigDecimal getCachedPricipMm(BigDecimal langitude, BigDecimal longitude, LocalDate checkForDate) {
-        Optional<WeatherCache> cachedWeather = weatherCacheRepository.findByLatitudeAndLongitudeAndDate(langitude,
+        Optional<WeatherCache> cachedWeather = weatherCacheRepository.findByDestinationLatitudeAndDestinationLongitudeAndForecastDate(langitude,
                 longitude, checkForDate);
 
         if (cachedWeather.isPresent()) {
