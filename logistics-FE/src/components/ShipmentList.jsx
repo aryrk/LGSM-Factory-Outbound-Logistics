@@ -4,21 +4,22 @@ import RiskBadge from "./RiskBadge";
 const ShipmentList = ({ shipments }) => {
   return (
     <div
-      className="container border rounded bg-white p-3 p-md-4 d-flex flex-column h-100"
-      style={{ maxHeight: "90%" }}
+      className="border rounded bg-white p-3 p-md-4 d-flex flex-column shadow-sm"
+      style={{ height: "100%", minHeight: "420px" }}
     >
-      <h3 className="mb-3">Shipment List</h3>
+      <h3 className="mb-3 text-center">Shipment List</h3>
       <div
         className="table-responsive flex-grow-1"
         style={{
-          maxHeight: "calc(100vh - 220px)",
-          overflow: "auto",
-          scrollbarWidth: "none",
-          msOverflowStyle: "none",
+          maxHeight: "520px",
+          overflowY: "auto",
+          overflowX: "auto",
+          border: "1px solid #e5e7eb",
+          borderRadius: "10px",
         }}
       >
-        <table className="table table-striped table-bordered table-hover mb-0">
-          <thead className="thead-light position-sticky top-0">
+        <table className="table table-striped table-bordered table-hover mb-0 align-middle">
+          <thead className="table-light position-sticky top-0">
             <tr>
               <th>Product Code</th>
               <th>Quantity</th>

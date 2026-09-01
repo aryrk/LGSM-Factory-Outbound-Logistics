@@ -31,15 +31,21 @@ const ShipmentForm = ({ onAddShipment }) => {
       return;
     }
 
+    const latitude = Number(formData.destinationLatitude);
+    const longitude = Number(formData.destinationLongitude);
+
+    if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) {
+      return;
+    }
+
     const newShipment = {
       id: crypto.randomUUID(),
-      ...formData,
-      quantity: parseInt(formData.quantity),
-      destinationLatitude: parseFloat(formData.destinationLatitude),
-      destinationLongitude: parseFloat(formData.destinationLongitude),
-      shipmentStatus: "PENDING",
-      riskLevel: "UNKNOWN",
-      createdAt: new Date().toISOString(),
+      productCode: formData.productCode,
+      quantity: Number.parseInt(formData.quantity, 10),
+      destinationCity: formData.destinationCity,
+      destinationLatitude: latitude,
+      destinationLongitude: longitude,
+      dispatchDate: formData.dispatchDate,
     };
 
     onAddShipment(newShipment);
