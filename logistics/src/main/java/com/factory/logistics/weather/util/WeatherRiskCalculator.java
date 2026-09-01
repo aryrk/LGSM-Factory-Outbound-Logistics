@@ -16,9 +16,12 @@ public class WeatherRiskCalculator {
             return RiskLevel.UNKNOWN;
         }
         double precip = precipMm.doubleValue();
-        // NOTE TO SELF: The requirementss says that "Risk Rule (use exactly this): precipitation_sum for the dispatch date → 0mm = LOW, 1–10mm = MEDIUM, &gt;10mm = HIGH."
-        // It's currently using the exact rule, but please confirm if possible since there will be gap, e.g: 0.5
-        RiskLevel result = null;
+        // NOTE TO SELF: The requirementss says that "Risk Rule (use exactly this):
+        // precipitation_sum for the dispatch date → 0mm = LOW, 1–10mm = MEDIUM,
+        // &gt;10mm = HIGH."
+        // It's currently using the exact rule, but please confirm if possible since
+        // there will be gap, e.g: 0.5
+        RiskLevel result = RiskLevel.UNKNOWN;
         if (precip == 0.0) {
             result = RiskLevel.LOW;
         } else if (precip >= 1.0 && precip <= 10.0) {
