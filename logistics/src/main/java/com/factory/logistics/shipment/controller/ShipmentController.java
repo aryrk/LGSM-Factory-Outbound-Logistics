@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -46,6 +47,12 @@ public class ShipmentController {
     public ResponseEntity<CreateShipmentResponse> getShipmentById(@PathVariable UUID id) {
         CreateShipmentResponse response = shipmentService.getShipmentById(id);
         return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteShipment(@PathVariable UUID id) {
+        shipmentService.deleteShipment(id);
+        return ResponseEntity.ok().body(null);
     }
     
 }

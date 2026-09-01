@@ -35,6 +35,7 @@ For the frontend, navigate to `logistics-FE`, copy `.env.example` to `.env`, run
 - **POST** `/api/shipments`- Create shipment and compute risk
 - **GET** `/api/shipments` - List all shipments
 - **GET** `/api/shipments/{id}` - Get specific shipment (returns 404 if missing)
+- **DELETE** `/api/shipments/{id}` - Delete specific shipment
 
 Example payload:
 

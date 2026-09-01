@@ -46,4 +46,10 @@ public class ShipmentService {
                 .orElseThrow(() -> new com.factory.logistics.exception.ResourceNotFoundException("Shipment not found with id: " + shipmentId));
         return CreateShipmentResponse.fromEntity(shipment);
     }
+
+    public void deleteShipment(UUID shipmentId) {
+        Shipment shipment = shipmentRepository.findById(shipmentId)
+                .orElseThrow(() -> new com.factory.logistics.exception.ResourceNotFoundException("Shipment not found with id: " + shipmentId));
+        shipmentRepository.delete(shipment);
+    }
 }
