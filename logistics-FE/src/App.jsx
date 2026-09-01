@@ -1,122 +1,88 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
+import { useState, useEffect } from "react";
+import "./App.css";
+import ShipmentForm from "./components/ShipmentForm";
+import ShipmentList from "./components/ShipmentList";
+import { fetchShipments, createShipment } from "./services/api";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [shipments, setShipments] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const loadShipments = async () => {
+    try {
+      setLoading(true);
+      const data = await fetchShipments();
+      setShipments(data);
+      setError(null);
+    } catch (error) {
+      setError("Failed to load shipments. Please try again later.");
+      console.error("Error fetching shipments:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadShipments();
+  }, []);
+
+  const handleAddShipment = async (newShipment) => {
+    try {
+      const payload = {
+        productCode: newShipment.productCode,
+        quantity: newShipment.quantity,
+        destinationCity: newShipment.destinationCity,
+        destinationLatitude: newShipment.destinationLatitude,
+        destinationLongitude: newShipment.destinationLongitude,
+        dispatchDate: newShipment.dispatchDate,
+      };
+
+      const createdShipment = await createShipment(payload);
+      setShipments((prevShipments) => [...prevShipments, createdShipment]);
+      setError(null);
+    } catch (error) {
+      setError("Failed to add shipment. Please try again later.");
+      console.error("Error creating shipment:", error);
+    }
+  };
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <div className="container-fluid vh-100 overflow-auto bg-light text-dark px-3 px-md-4 py-3 d-flex flex-column">
+      <div className="w-100">
+        <h1 className="mb-4 text-center">Shipment Management</h1>
+        {error && (
+          <div
+            className="alert alert-warning text-center py-2 mb-3"
+            role="alert"
+          >
+            {error}
+          </div>
+        )}
 
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+        {loading ? (
+          <div className="text-center my-5">
+            <div className="spinner-border text-primary" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
+          </div>
+        ) : (
+          <div className="row g-4 align-items-start h-100 justify-content-center">
+            <div className="col-12 col-lg-5 d-flex justify-content-center">
+              <div className="w-100">
+                <ShipmentForm onAddShipment={handleAddShipment} />
+              </div>
+            </div>
+            <div className="col-12 col-lg-7 d-flex justify-content-center">
+              <div className="w-100">
+                <ShipmentList shipments={shipments} />
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
 }
 
-export default App
+export default App;

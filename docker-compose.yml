@@ -1,0 +1,63 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: logistics-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: factory_logistics
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d factory_logistics"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./logistics
+    container_name: logistics-backend
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8082:8082"
+    environment:
+      DB_URL: jdbc:postgresql://postgres:5432/factory_logistics
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+      OPENMETEO_API_URL: https://api.open-meteo.com/v1/forecast
+    command:
+      - sh
+      - -c
+      - |
+        if [ ! -f .env ]; then cp .env.example .env; fi
+        ./mvnw spring-boot:run
+
+  frontend:
+    build:
+      context: ./logistics-FE
+    container_name: logistics-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "5173:5173"
+    environment:
+      VITE_API_BASE_URL: http://localhost:8082/api
+    command:
+      - sh
+      - -c
+      - |
+        if [ ! -f .env ]; then cp .env.example .env; fi
+        npm run dev -- --host 0.0.0.0 --port 5173
+
+volumes:
+  postgres_data:
