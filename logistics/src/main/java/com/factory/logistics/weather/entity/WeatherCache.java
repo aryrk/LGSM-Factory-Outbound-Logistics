@@ -3,6 +3,7 @@ package com.factory.logistics.weather.entity;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.hibernate.annotations.CreationTimestamp;

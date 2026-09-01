@@ -1,5 +1,8 @@
 package com.factory.logistics.weather.repository;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,5 +12,5 @@ import com.factory.logistics.weather.entity.WeatherCache;
 
 @Repository
 public interface WeatherCacheRepository extends JpaRepository<WeatherCache, UUID> {
-
+    Optional<WeatherCache> findByLatitudeAndLongitudeAndDate(BigDecimal latitude, BigDecimal longitude, LocalDate date);
 }
